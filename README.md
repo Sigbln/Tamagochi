@@ -13,6 +13,6 @@
 
 ## Как запустить? ##
 
-+ Скачать с гитхаба
-+ прописать в терминале/консоли python main.pp
++ git clone https://github.com/Sigbln/Tamagochi.git
++ python main.py
     

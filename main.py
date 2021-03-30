@@ -1,101 +1,36 @@
-import os
-import pygame
-import Pet
-import pickle
-import time
-
-my_path = "save/save.pickle"
+from saver import *
+from HUD import *
+from make_anims import *
 
 pygame.init()
 
-pet = Pet.Pet()
-
-# проверея существует ли файл с сохранением и загружаю последнее сохранение
-if os.path.exists(my_path) and os.path.getsize(my_path) > 0:
-    with open(my_path, 'rb') as f:
-        data = pickle.load(f)
-    kof = int((time.time() - data['time']) / (3600 * 24) * 40)
-    pet.eat = data['eat'] - kof
-    if pet.eat < 0:
-        pet.hp += pet.eat
-        pet.eat = 0
-    pet.sleep = data['sleep'] - kof
-    if pet.sleep < 0:
-        pet.hp += pet.sleep
-        pet.sleep = 0
-    pet.bot = data['bot'] - kof
-
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-
-# HUD
-font1 = pygame.font.Font(None, 15)  # Размер для HUD
-font2 = pygame.font.Font(None, 25)
-ABot = [font2.render('Botayem .', True, WHITE),
-        font2.render('Botayem ..', True, WHITE),
-        font2.render('Botayem ...', True, WHITE)]
-AEat = [font2.render('Eating .', True, WHITE),
-        font2.render('Eating ..', True, WHITE),
-        font2.render('Eating ...', True, WHITE)]
-ASleep = [font2.render('Sleeping .', True, WHITE),
-          font2.render('Sleeping ..', True, WHITE),
-          font2.render('Sleeping ...', True, WHITE)]
+load()  # загрузка сохранения
 
 clock = pygame.time.Clock()
 pygame.display.set_caption("MIPT study")
-
-# Делаю листы для анимации
-bg = True
-BG = []
-for i in range(48):
-    BG.append(pygame.image.load(f"images/bg/{i}.gif"))
-
-eat = False
-EAT1 = []
-for i in range(40):
-    EAT1.append(pygame.image.load(f"images/eat1/{i}.gif"))
-
-bot = False
-BOT1 = []
-for i in range(3):
-    BOT1.append(pygame.image.load(f"images/bot/{i}.gif"))
-
-sleep = False
-SLEEP1 = []
-for i in range(15):
-    SLEEP1.append(pygame.image.load(f"images/sleep/{i}.gif"))
-
-dead = False
-DEAD = []
-for i in range(22):
-    DEAD.append(pygame.image.load(f"images/dead/{i}.gif"))
-
-animCount = 0  # кадры для анимок
-ANIM_TIME = 150  # тики анимок
-GAME_TIME = 540  # тики до уменьшения показателей
 
 
 # проверка показателей на норму
 def a_u_ok():
     global dead
     global bg
-    if pet.bot > 100:
-        pet.bot = 100
-    if pet.sleep > 100:
-        pet.sleep = 100
-    if pet.sleep < 0:
+    if pet.bot > FULL:
+        pet.bot = FULL
+    if pet.sleep > FULL:
+        pet.sleep = FULL
+    if pet.sleep < EMPTY:
         pet.hp += pet.sleep
-        pet.sleep = 0
-    if pet.eat > 100:
-        pet.eat = 100
-    if pet.eat < 0:
+        pet.sleep = EMPTY
+    if pet.eat > FULL:
+        pet.eat = FULL
+    if pet.eat < EMPTY:
         pet.hp += pet.eat
-        pet.eat = 0
-    if pet.hp < 1:
-        pet.hp = 100
-        pet.eat = 100
-        pet.bot = 100
-        pet.sleep = 100
+        pet.eat = EMPTY
+    if pet.hp <= EMPTY:
+        pet.hp = FULL
+        pet.eat = FULL
+        pet.bot = FULL
+        pet.sleep = FULL
         dead = True
         bg = False
 
@@ -177,20 +112,20 @@ while run:
 
     # Уменьшение показателей
     GAME_TIME -= 1
-    if GAME_TIME == 0:
+    if GAME_TIME == EMPTY:
         GAME_TIME = 540
-        if pet.bot > 0:
+        if pet.bot > EMPTY:
             pet.bot -= 1
-        if pet.sleep > 0:
+        if pet.sleep > EMPTY:
             pet.sleep -= 1
-        if pet.eat > 0:
+        if pet.eat > EMPTY:
             pet.eat -= 1
         if not pet.eat * pet.sleep:
             pet.hp -= 1
 
     # время выполнения анимок
     if not bg:
-        if ANIM_TIME == 0:
+        if ANIM_TIME == EMPTY:
             if dead:
                 run = False
             bg = True
@@ -201,17 +136,13 @@ while run:
         ANIM_TIME -= 1
 
     a_u_ok()
-
+    # обновляем выводимые значения
     TEat = font1.render(f'Satiety: {pet.eat}', True, WHITE)
     TBot = font1.render(f'Bot:       {pet.bot}', True, WHITE)
     TSleep = font1.render(f'Sleep:   {pet.sleep}', True, WHITE)
 
     draw_screen()
 
-# сохранение
-with open(my_path, 'wb') as f:
-    data = {'eat': pet.eat, 'bot': pet.bot, 'sleep': pet.sleep, 'hp': pet.hp,
-            'time': time.time()}
-    pickle.dump(data, f)
+save()  # Сохраняем
 
 pygame.quit()
