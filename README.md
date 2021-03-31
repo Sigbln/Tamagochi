@@ -13,6 +13,6 @@
 
 ## Как запустить? ##
 
-+ git clone https://github.com/Sigbln/Tamagochi.git
-+ python main.py
+<p><code>git clone https://github.com/Sigbln/Tamagochi.git</code><p>
+<p><code>python main.py</code><p>
     

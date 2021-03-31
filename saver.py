@@ -1,30 +1,38 @@
-from global_names import *
-import pickle
+import global_names
 import os
+import pickle
 import time
 
+'''
+проверяет существует ли файл с сохранением и загружаю последнее сохранение
 
-# проверея существует ли файл с сохранением и загружаю последнее сохранение
+kof - значение на которое я буду уменьшать показатели после какого-то времени
+в не игры, за 12 часов вне игры показатели падают на 40 пунктов
+'''
+
+
 def load():
-    if os.path.exists(my_path) and os.path.getsize(my_path) > EMPTY:
-        with open(my_path, 'rb') as f:
+    if os.path.exists(global_names.MY_PATH) and os.path.getsize(
+            global_names.MY_PATH) > global_names.EMPTY:
+        with open(global_names.MY_PATH, 'rb') as f:
             data = pickle.load(f)
         kof = int((time.time() - data['time']) / (3600 * 24) * 40)
-        pet.eat = data['eat'] - kof
-        if pet.eat < 0:
-            pet.hp += pet.eat
-            pet.eat = 0
-        pet.sleep = data['sleep'] - kof
-        if pet.sleep < 0:
-            pet.hp += pet.sleep
-            pet.sleep = 0
-        pet.bot = data['bot'] - kof
+        global_names.pet.eat = data['eat'] - kof
+        if global_names.pet.eat < 0:
+            global_names.pet.hp += global_names.pet.eat
+            global_names.pet.eat = 0
+        global_names.pet.sleep = data['sleep'] - kof
+        if global_names.pet.sleep < 0:
+            global_names.pet.hp += global_names.pet.sleep
+            global_names.pet.sleep = 0
+        global_names.pet.bot = data['bot'] - kof
 
 
 # сохранение
 def save():
-    with open(my_path, 'wb') as f:
-        data = {'eat': pet.eat, 'bot': pet.bot, 'sleep': pet.sleep,
-                'hp': pet.hp,
+    with open(global_names.MY_PATH, 'wb') as f:
+        data = {'eat': global_names.pet.eat, 'bot': global_names.pet.bot,
+                'sleep': global_names.pet.sleep,
+                'hp': global_names.pet.hp,
                 'time': time.time()}
         pickle.dump(data, f)
