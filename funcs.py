@@ -8,18 +8,17 @@ pygame.init()
 
 # проверка показателей на норму
 def a_u_ok():
-    if global_names.pet.bot > global_names.FULL:
-        global_names.pet.bot = global_names.FULL
-    if global_names.pet.sleep > global_names.FULL:
-        global_names.pet.sleep = global_names.FULL
-    if global_names.pet.sleep < global_names.EMPTY:
-        global_names.pet.hp += global_names.pet.sleep
-        global_names.pet.sleep = global_names.EMPTY
-    if global_names.pet.eat > global_names.FULL:
-        global_names.pet.eat = global_names.FULL
-    if global_names.pet.eat < global_names.EMPTY:
-        global_names.pet.hp += global_names.pet.eat
-        global_names.pet.eat = global_names.EMPTY
+    # stat < 101
+    global_names.pet.bot = min(global_names.pet.bot, global_names.FULL)
+    global_names.pet.eat = min(global_names.pet.eat, global_names.FULL)
+    global_names.pet.sleep = min(global_names.pet.sleep, global_names.FULL)
+    # decrease hp if stats < 0
+    global_names.pet.hp += min(global_names.pet.eat, global_names.EMPTY)
+    global_names.pet.hp += min(global_names.pet.sleep, global_names.EMPTY)
+    # stat >= 0
+    global_names.pet.bot = max(global_names.pet.bot, global_names.EMPTY)
+    global_names.pet.eat = max(global_names.pet.eat, global_names.EMPTY)
+    global_names.pet.sleep = max(global_names.pet.sleep, global_names.EMPTY)
     if global_names.pet.hp <= global_names.EMPTY:
         global_names.pet.hp = global_names.FULL
         global_names.pet.eat = global_names.FULL
@@ -31,17 +30,17 @@ def a_u_ok():
 
 # Уменьшение показателей
 def stat_decrease():
-    global_names.GAME_TIME -= 1
+    global_names.GAME_TIME -= global_names.ORDINARY_DECREASE
     if global_names.GAME_TIME == global_names.EMPTY:
         global_names.GAME_TIME = 540
         if global_names.pet.bot > global_names.EMPTY:
-            global_names.pet.bot -= 1
+            global_names.pet.bot -= global_names.ORDINARY_DECREASE
         if global_names.pet.sleep > global_names.EMPTY:
-            global_names.pet.sleep -= 1
+            global_names.pet.sleep -= global_names.ORDINARY_DECREASE
         if global_names.pet.eat > global_names.EMPTY:
-            global_names.pet.eat -= 1
+            global_names.pet.eat -= global_names.ORDINARY_DECREASE
         if not global_names.pet.eat * global_names.pet.sleep:
-            global_names.pet.hp -= 1
+            global_names.pet.hp -= global_names.ORDINARY_DECREASE
 
 
 # время выполнения анимок
@@ -55,7 +54,7 @@ def timer():
             global_names.SLEEP = False
             global_names.BOT = False
             global_names.ANIM_TIME = 150
-        global_names.ANIM_TIME -= 1
+        global_names.ANIM_TIME -= global_names.ORDINARY_DECREASE
 
 
 def key_checker():
@@ -66,22 +65,22 @@ def key_checker():
             if global_names.EVENT.key == pygame.K_f and global_names.BG:
                 global_names.BG = False
                 global_names.EAT = True
-                global_names.pet.eat += 30
-                global_names.pet.bot -= 5
-                global_names.pet.sleep -= 5
+                global_names.pet.eat += global_names.EAT_INCREASE
+                global_names.pet.bot -= global_names.BOT_DECREASE
+                global_names.pet.sleep -= global_names.SLEEP_DECREASE
             if global_names.EVENT.key == pygame.K_s and global_names.BG:
                 global_names.BG = False
                 global_names.SLEEP = True
-                global_names.pet.sleep += 50
-                global_names.pet.eat -= 20
-                if global_names.pet.bot > 70:
-                    global_names.pet.bot += 10
+                global_names.pet.sleep += global_names.SLEEP_INCREASE
+                global_names.pet.eat -= global_names.EAT_DECREASE
+                if global_names.pet.bot > global_names.BOARD_BOT:
+                    global_names.pet.bot += global_names.BOT_INCREASE
             if global_names.EVENT.key == pygame.K_b and global_names.BG:
                 global_names.BG = False
                 global_names.BOT = True
-                global_names.pet.bot += 10
-                global_names.pet.sleep -= 20
-                global_names.pet.eat -= 20
+                global_names.pet.bot += global_names.BOT_INCREASE
+                global_names.pet.sleep -= global_names.SLEEP_DECREASE
+                global_names.pet.eat -= global_names.EAT_DECREASE
 
 
 def draw_screen():
@@ -92,43 +91,47 @@ def draw_screen():
     TSleep = HUD.font1.render(f'Sleep:   {global_names.pet.sleep}', True,
                               global_names.WHITE)
     if global_names.DEAD:  # отыгровка смерти
-        screen = pygame.display.set_mode((576, 576))
-        if global_names.ANIM_COUNT + 1 > 22:
+        screen = pygame.display.set_mode(global_names.DEAD_SCREEN)
+        if global_names.ANIM_COUNT + 1 > global_names.DEAD_COUNT:
             global_names.ANIM_COUNT = 0
-        screen.blit(make_anims.DEAD1[global_names.ANIM_COUNT], (0, 0))
+        screen.blit(make_anims.DEAD1[global_names.ANIM_COUNT],
+                    global_names.START_POINT)
         global_names.ANIM_COUNT += 1
     elif global_names.BG:  #
-        screen = pygame.display.set_mode((576, 275))
-        if global_names.ANIM_COUNT + 1 > 96:
+        screen = pygame.display.set_mode(global_names.BG_SCREEN)
+        if global_names.ANIM_COUNT + 1 > global_names.BG_COUNT:
             global_names.ANIM_COUNT = 0
         screen.blit(make_anims.BG1[global_names.ANIM_COUNT // 2],
-                    (0, 0))
+                    global_names.START_POINT)
         pygame.draw.rect(screen, global_names.BLACK, (10, 10, 70, 34))
         screen.blit(TEat, (12, 12))
         screen.blit(TBot, (12, 22))
         screen.blit(TSleep, (12, 32))
         global_names.ANIM_COUNT += 1
     elif global_names.EAT:  # Eat
-        screen = pygame.display.set_mode((576, 504))
-        if global_names.ANIM_COUNT + 1 > 40:
+        screen = pygame.display.set_mode(global_names.EAT_SCREEN)
+        if global_names.ANIM_COUNT + 1 > global_names.EAT_COUNT:
             global_names.ANIM_COUNT = 0
-        screen.blit(make_anims.EAT1[global_names.ANIM_COUNT], (0, 0))
+        screen.blit(make_anims.EAT1[global_names.ANIM_COUNT],
+                    global_names.START_POINT)
         pygame.draw.rect(screen, global_names.BLACK, (10, 10, 80, 20))
         screen.blit(HUD.AEat[global_names.ANIM_COUNT * 3 // 40], (12, 12))
         global_names.ANIM_COUNT += 1
     elif global_names.BOT:  # Bot
-        screen = pygame.display.set_mode((576, 324))
-        if global_names.ANIM_COUNT + 1 > 30:
+        screen = pygame.display.set_mode(global_names.BOT_SCREEN)
+        if global_names.ANIM_COUNT + 1 > global_names.BOT_COUNT:
             global_names.ANIM_COUNT = 0
-        screen.blit(make_anims.BOT1[global_names.ANIM_COUNT // 10], (0, 0))
+        screen.blit(make_anims.BOT1[global_names.ANIM_COUNT // 10],
+                    global_names.START_POINT)
         pygame.draw.rect(screen, global_names.BLACK, (10, 10, 100, 20))
         screen.blit(HUD.ABot[global_names.ANIM_COUNT // 10], (12, 12))
         global_names.ANIM_COUNT += 1
     elif global_names.SLEEP:  # Sleep
-        screen = pygame.display.set_mode((576, 430))
-        if global_names.ANIM_COUNT + 1 > 60:
+        screen = pygame.display.set_mode(global_names.SLEEP_SCREEN)
+        if global_names.ANIM_COUNT + 1 > global_names.SLEEP_COUNT:
             global_names.ANIM_COUNT = 0
-        screen.blit(make_anims.SLEEP1[global_names.ANIM_COUNT // 4], (0, 0))
+        screen.blit(make_anims.SLEEP1[global_names.ANIM_COUNT // 4],
+                    global_names.START_POINT)
         pygame.draw.rect(screen, global_names.BLACK, (10, 10, 100, 20))
         screen.blit(HUD.ASleep[global_names.ANIM_COUNT // 20], (12, 12))
         global_names.ANIM_COUNT += 1
