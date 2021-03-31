@@ -93,14 +93,14 @@ def draw_screen():
     if global_names.DEAD:  # отыгровка смерти
         screen = pygame.display.set_mode(global_names.DEAD_SCREEN)
         if global_names.ANIM_COUNT + 1 > global_names.DEAD_COUNT:
-            global_names.ANIM_COUNT = 0
+            global_names.ANIM_COUNT = global_names.EMPTY
         screen.blit(make_anims.DEAD1[global_names.ANIM_COUNT],
                     global_names.START_POINT)
         global_names.ANIM_COUNT += 1
     elif global_names.BG:  #
         screen = pygame.display.set_mode(global_names.BG_SCREEN)
         if global_names.ANIM_COUNT + 1 > global_names.BG_COUNT:
-            global_names.ANIM_COUNT = 0
+            global_names.ANIM_COUNT = global_names.EMPTY
         screen.blit(make_anims.BG1[global_names.ANIM_COUNT // 2],
                     global_names.START_POINT)
         pygame.draw.rect(screen, global_names.BLACK, (10, 10, 70, 34))
@@ -111,7 +111,7 @@ def draw_screen():
     elif global_names.EAT:  # Eat
         screen = pygame.display.set_mode(global_names.EAT_SCREEN)
         if global_names.ANIM_COUNT + 1 > global_names.EAT_COUNT:
-            global_names.ANIM_COUNT = 0
+            global_names.ANIM_COUNT = global_names.EMPTY
         screen.blit(make_anims.EAT1[global_names.ANIM_COUNT],
                     global_names.START_POINT)
         pygame.draw.rect(screen, global_names.BLACK, (10, 10, 80, 20))
@@ -120,7 +120,7 @@ def draw_screen():
     elif global_names.BOT:  # Bot
         screen = pygame.display.set_mode(global_names.BOT_SCREEN)
         if global_names.ANIM_COUNT + 1 > global_names.BOT_COUNT:
-            global_names.ANIM_COUNT = 0
+            global_names.ANIM_COUNT = global_names.EMPTY
         screen.blit(make_anims.BOT1[global_names.ANIM_COUNT // 10],
                     global_names.START_POINT)
         pygame.draw.rect(screen, global_names.BLACK, (10, 10, 100, 20))
@@ -129,7 +129,7 @@ def draw_screen():
     elif global_names.SLEEP:  # Sleep
         screen = pygame.display.set_mode(global_names.SLEEP_SCREEN)
         if global_names.ANIM_COUNT + 1 > global_names.SLEEP_COUNT:
-            global_names.ANIM_COUNT = 0
+            global_names.ANIM_COUNT = global_names.EMPTY
         screen.blit(make_anims.SLEEP1[global_names.ANIM_COUNT // 4],
                     global_names.START_POINT)
         pygame.draw.rect(screen, global_names.BLACK, (10, 10, 100, 20))
