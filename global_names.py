@@ -1,5 +1,6 @@
-import Pet
 import pygame
+
+import Pet
 
 pygame.init()
 

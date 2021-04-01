@@ -1,6 +1,7 @@
+import pygame
+
 import funcs
 import global_names
-import pygame
 import saver
 
 pygame.init()

@@ -1,5 +1,6 @@
-import global_names
 import pygame
+
+import global_names
 
 pygame.init()
 

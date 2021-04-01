@@ -1,7 +1,8 @@
-import global_names
 import os
-import pickle
 import time
+
+import global_names
+import pickle
 
 """
 проверяет существует ли файл с сохранением и загружаю последнее сохранение

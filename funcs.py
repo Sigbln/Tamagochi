@@ -1,7 +1,8 @@
+import pygame
+
 import global_names
 import HUD
 import make_anims
-import pygame
 
 pygame.init()
 
