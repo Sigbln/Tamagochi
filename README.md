@@ -14,5 +14,13 @@
 ## Как запустить? ##
 
 <p><code>git clone https://github.com/Sigbln/Tamagochi.git</code><p>
+<p><code>cd Tamagochi</code><p>
 <p><code>python main.py</code><p>
-    
+
+## Screens ##
+
+![img.png](Screens/img.png)
+![img.png](Screens/img_1.png)
+![img.png](Screens/img_2.png)
+![img.png](Screens/img_3.png)
+![img.png](Screens/img_4.png)
