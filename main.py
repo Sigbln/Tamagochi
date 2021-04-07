@@ -13,15 +13,10 @@ saver.load()  # загрузка сохранения
 
 while global_names.RUN:
     clock.tick(30)  # FPS
-
-    funcs.key_checker()
-
-    funcs.stat_decrease()
-
+    funcs.key_checker() 
+    funcs.stat_decrease() # decrease stats
     funcs.timer()  # anim timer
-
     funcs.a_u_ok()  # checking stats for borders
-
     funcs.draw_screen()
 
 saver.save()  # Сохраняем
