@@ -12,10 +12,11 @@
   исправить
 
 ## Как запустить? ##
-
-<p><code>git clone https://github.com/Sigbln/Tamagochi.git</code><p>
-<p><code>cd Tamagochi</code><p>
-<p><code>python main.py</code><p>
+```
+git clone https://github.com/Sigbln/Tamagochi.git
+cd Tamagochi
+python main.py
+```
 
 ## Screens ##
 
