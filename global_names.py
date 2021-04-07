@@ -13,6 +13,7 @@ ANIM_TIME = 150  # тики анимок
 ANIM_TIME_CONST = 150
 GAME_TIME = 540  # тики до уменьшения показателей
 GAME_TIME_CONST = 540
+COEF = 90*24
 
 FULL = 100
 EMPTY = 0
