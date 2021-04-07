@@ -97,7 +97,7 @@ def draw_screen():
 
     if global_names.DEAD:  # отыгровка смерти
         screen = pygame.display.set_mode(global_names.DEAD_SCREEN)
-        if global_names.ANIM_COUNT + 1 > global_names.DEAD_COUNT:
+        if global_names.ANIM_COUNT >= global_names.DEAD_COUNT:
             global_names.ANIM_COUNT = global_names.EMPTY
         screen.blit(make_anims.DEAD1[global_names.ANIM_COUNT],
                     global_names.START_POINT)
@@ -106,7 +106,7 @@ def draw_screen():
     # BG
     elif global_names.BG:
         screen = pygame.display.set_mode(global_names.BG_SCREEN)
-        if global_names.ANIM_COUNT + 1 > global_names.BG_COUNT:
+        if global_names.ANIM_COUNT >= global_names.BG_COUNT:
             global_names.ANIM_COUNT = global_names.EMPTY
         screen.blit(make_anims.BG1[global_names.ANIM_COUNT // 2],
                     global_names.START_POINT)
@@ -119,7 +119,7 @@ def draw_screen():
     # Eat
     elif global_names.EAT:
         screen = pygame.display.set_mode(global_names.EAT_SCREEN)
-        if global_names.ANIM_COUNT + 1 > global_names.EAT_COUNT:
+        if global_names.ANIM_COUNT >= global_names.EAT_COUNT:
             global_names.ANIM_COUNT = global_names.EMPTY
         screen.blit(make_anims.EAT1[global_names.ANIM_COUNT],
                     global_names.START_POINT)
@@ -130,7 +130,7 @@ def draw_screen():
     # Bot
     elif global_names.BOT:
         screen = pygame.display.set_mode(global_names.BOT_SCREEN)
-        if global_names.ANIM_COUNT + 1 > global_names.BOT_COUNT:
+        if global_names.ANIM_COUNT >= global_names.BOT_COUNT:
             global_names.ANIM_COUNT = global_names.EMPTY
         screen.blit(make_anims.BOT1[global_names.ANIM_COUNT // 10],
                     global_names.START_POINT)
@@ -141,7 +141,7 @@ def draw_screen():
     # Sleep
     elif global_names.SLEEP:
         screen = pygame.display.set_mode(global_names.SLEEP_SCREEN)
-        if global_names.ANIM_COUNT + 1 > global_names.SLEEP_COUNT:
+        if global_names.ANIM_COUNT >= global_names.SLEEP_COUNT:
             global_names.ANIM_COUNT = global_names.EMPTY
         screen.blit(make_anims.SLEEP1[global_names.ANIM_COUNT // 4],
                     global_names.START_POINT)
