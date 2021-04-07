@@ -1,7 +1,7 @@
 import os
 import pygame
 
-# Делаю листы для анимации
+# Делаю листы для aнимации
 BG1 = [pygame.image.load(f"images/bg/{i}.gif") for i in
        range(len(os.listdir("images/bg")))]
 EAT1 = [pygame.image.load(f"images/eat1/{i}.gif") for i in
