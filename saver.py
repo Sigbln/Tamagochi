@@ -1,7 +1,7 @@
 import os
 import time
 
-import global_names
+import glbl_nms
 import pickle
 
 """
@@ -13,27 +13,27 @@ import pickle
 
 # загружаем сохранение и уменьшаем показатели
 def load():
-    if os.path.exists(global_names.MY_PATH) and os.path.getsize(
-            global_names.MY_PATH) > global_names.EMPTY:
-        with open(global_names.MY_PATH, "rb") as f:
+    if os.path.exists(glbl_nms.MY_PATH) and os.path.getsize(
+            glbl_nms.MY_PATH) > glbl_nms.EMPTY:
+        with open(glbl_nms.MY_PATH, "rb") as f:
             data = pickle.load(f)
-        coef_decrease = int((time.time() - data["time"]) / global_names.COEF)
-        global_names.pet.eat = data["eat"] - coef_decrease
-        if global_names.pet.eat < global_names.EMPTY:
-            global_names.pet.hp += global_names.pet.eat
-            global_names.pet.eat = global_names.EMPTY
-        global_names.pet.sleep = data["sleep"] - coef_decrease
-        if global_names.pet.sleep < global_names.EMPTY:
-            global_names.pet.hp += global_names.pet.sleep
-            global_names.pet.sleep = global_names.EMPTY
-        global_names.pet.bot = data["bot"] - coef_decrease
+        coef_decrease = int((time.time() - data["time"]) / glbl_nms.COEF)
+        glbl_nms.pet.eat = data["eat"] - coef_decrease
+        if glbl_nms.pet.eat < glbl_nms.EMPTY:
+            glbl_nms.pet.hp += glbl_nms.pet.eat
+            glbl_nms.pet.eat = glbl_nms.EMPTY
+        glbl_nms.pet.sleep = data["sleep"] - coef_decrease
+        if glbl_nms.pet.sleep < glbl_nms.EMPTY:
+            glbl_nms.pet.hp += glbl_nms.pet.sleep
+            glbl_nms.pet.sleep = glbl_nms.EMPTY
+        glbl_nms.pet.bot = data["bot"] - coef_decrease
 
 
 # сохранение
 def save():
-    with open(global_names.MY_PATH, "wb") as f:
-        data = {"eat": global_names.pet.eat, "bot": global_names.pet.bot,
-                "sleep": global_names.pet.sleep,
-                "hp": global_names.pet.hp,
+    with open(glbl_nms.MY_PATH, "wb") as f:
+        data = {"eat": glbl_nms.pet.eat, "bot": glbl_nms.pet.bot,
+                "sleep": glbl_nms.pet.sleep,
+                "hp": glbl_nms.pet.hp,
                 "time": time.time()}
         pickle.dump(data, f)

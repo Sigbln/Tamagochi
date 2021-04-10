@@ -1,6 +1,7 @@
 import pygame
+import random
 
-import global_names
+import glbl_nms
 import HUD
 import make_anims
 
@@ -10,143 +11,237 @@ pygame.init()
 # проверка показателей на норму
 def a_u_ok():
     # stat < 101
-    global_names.pet.bot = min(global_names.pet.bot, global_names.FULL)
-    global_names.pet.eat = min(global_names.pet.eat, global_names.FULL)
-    global_names.pet.sleep = min(global_names.pet.sleep, global_names.FULL)
+    glbl_nms.pet.bot = min(glbl_nms.pet.bot, glbl_nms.FULL)
+    glbl_nms.pet.eat = min(glbl_nms.pet.eat, glbl_nms.FULL)
+    glbl_nms.pet.sleep = min(glbl_nms.pet.sleep, glbl_nms.FULL)
 
     # decrease hp if stats < 0
-    global_names.pet.hp += min(global_names.pet.eat, global_names.EMPTY)
-    global_names.pet.hp += min(global_names.pet.sleep, global_names.EMPTY)
+    glbl_nms.pet.hp += min(glbl_nms.pet.eat, glbl_nms.EMPTY)
+    glbl_nms.pet.hp += min(glbl_nms.pet.sleep, glbl_nms.EMPTY)
 
     # stat >= 0
-    global_names.pet.bot = max(global_names.pet.bot, global_names.EMPTY)
-    global_names.pet.eat = max(global_names.pet.eat, global_names.EMPTY)
-    global_names.pet.sleep = max(global_names.pet.sleep, global_names.EMPTY)
+    glbl_nms.pet.bot = max(glbl_nms.pet.bot, glbl_nms.EMPTY)
+    glbl_nms.pet.eat = max(glbl_nms.pet.eat, glbl_nms.EMPTY)
+    glbl_nms.pet.sleep = max(glbl_nms.pet.sleep, glbl_nms.EMPTY)
 
-    if global_names.pet.hp <= global_names.EMPTY:
-        global_names.pet.hp = global_names.FULL
-        global_names.pet.eat = global_names.FULL
-        global_names.pet.bot = global_names.FULL
-        global_names.pet.sleep = global_names.FULL
-        global_names.DEAD = True
-        global_names.BG = False
+    if glbl_nms.pet.hp <= glbl_nms.EMPTY:
+        glbl_nms.pet.hp = glbl_nms.FULL
+        glbl_nms.pet.eat = glbl_nms.FULL
+        glbl_nms.pet.bot = glbl_nms.FULL
+        glbl_nms.pet.sleep = glbl_nms.FULL
+        glbl_nms.DEAD = True
+        glbl_nms.BG = False
 
 
 # Уменьшение показателей
 def stat_decrease():
-    global_names.GAME_TIME -= global_names.ORDINARY_DECREASE
-    if global_names.GAME_TIME == global_names.EMPTY:
-        global_names.GAME_TIME = global_names.GAME_TIME_CONST
-        if global_names.pet.bot > global_names.EMPTY:
-            global_names.pet.bot -= global_names.ORDINARY_DECREASE
-        if global_names.pet.sleep > global_names.EMPTY:
-            global_names.pet.sleep -= global_names.ORDINARY_DECREASE
-        if global_names.pet.eat > global_names.EMPTY:
-            global_names.pet.eat -= global_names.ORDINARY_DECREASE
-        if not global_names.pet.eat * global_names.pet.sleep:
-            global_names.pet.hp -= global_names.ORDINARY_DECREASE
+    glbl_nms.GAME_TIME -= glbl_nms.ORDINARY_DECREASE
+    if glbl_nms.GAME_TIME == glbl_nms.EMPTY:
+        glbl_nms.GAME_TIME = glbl_nms.GAME_TIME_CONST
+        if glbl_nms.pet.bot > glbl_nms.EMPTY:
+            glbl_nms.pet.bot -= glbl_nms.ORDINARY_DECREASE
+        if glbl_nms.pet.sleep > glbl_nms.EMPTY:
+            glbl_nms.pet.sleep -= glbl_nms.ORDINARY_DECREASE
+        if glbl_nms.pet.eat > glbl_nms.EMPTY:
+            glbl_nms.pet.eat -= glbl_nms.ORDINARY_DECREASE
+        if not glbl_nms.pet.eat * glbl_nms.pet.sleep:
+            glbl_nms.pet.hp -= glbl_nms.ORDINARY_DECREASE
 
 
 # время выполнения анимок
 def timer():
-    if not global_names.BG:
-        if global_names.ANIM_TIME == global_names.EMPTY:
-            if global_names.DEAD:
-                global_names.RUN = False
-            global_names.BG = True
-            global_names.EAT = False
-            global_names.SLEEP = False
-            global_names.BOT = False
-            global_names.ANIM_TIME = global_names.ANIM_TIME_CONST
-        global_names.ANIM_TIME -= global_names.ORDINARY_DECREASE
+    if not glbl_nms.BG:
+        if glbl_nms.ANIM_TIME == glbl_nms.EMPTY:
+            if glbl_nms.DEAD:
+                glbl_nms.RUN = False
+            glbl_nms.BG = True
+            glbl_nms.EAT = False
+            glbl_nms.SLEEP = False
+            glbl_nms.BOT = False
+            glbl_nms.ANIM_TIME = glbl_nms.ANIM_TIME_CONST
+        glbl_nms.ANIM_TIME -= glbl_nms.ORDINARY_DECREASE
 
 
 def key_checker():
-    for global_names.EVENT in pygame.event.get():
-        if global_names.EVENT.type == pygame.QUIT:
-            global_names.RUN = False
-        if global_names.EVENT.type == pygame.KEYDOWN:  # проверка на действия
-            if global_names.EVENT.key == pygame.K_f and global_names.BG:
-                global_names.BG = False
-                global_names.EAT = True
-                global_names.pet.eat += global_names.EAT_INCREASE
-                global_names.pet.bot -= global_names.BOT_DECREASE
-                global_names.pet.sleep -= global_names.SLEEP_DECREASE
-            if global_names.EVENT.key == pygame.K_s and global_names.BG:
-                global_names.BG = False
-                global_names.SLEEP = True
-                global_names.pet.sleep += global_names.SLEEP_INCREASE
-                global_names.pet.eat -= global_names.EAT_DECREASE
-                if global_names.pet.bot > global_names.BOARD_BOT:
-                    global_names.pet.bot += global_names.BOT_INCREASE
-            if global_names.EVENT.key == pygame.K_b and global_names.BG:
-                global_names.BG = False
-                global_names.BOT = True
-                global_names.pet.bot += global_names.BOT_INCREASE
-                global_names.pet.sleep -= global_names.SLEEP_DECREASE
-                global_names.pet.eat -= global_names.EAT_DECREASE
+    for glbl_nms.EVENT in pygame.event.get():
+        if glbl_nms.EVENT.type == pygame.QUIT:
+            glbl_nms.RUN = False
+        if glbl_nms.EVENT.type == pygame.KEYDOWN:  # проверка на действия
+            if glbl_nms.EVENT.key == pygame.K_f and glbl_nms.BG:
+                glbl_nms.BG = False
+                glbl_nms.EAT = True
+                glbl_nms.pet.eat += glbl_nms.EAT_INCREASE
+                glbl_nms.pet.bot -= glbl_nms.BOT_DECREASE
+                glbl_nms.pet.sleep -= glbl_nms.SLEEP_DECREASE
+            if glbl_nms.EVENT.key == pygame.K_s and glbl_nms.BG:
+                glbl_nms.BG = False
+                glbl_nms.SLEEP = True
+                glbl_nms.pet.sleep += glbl_nms.SLEEP_INCREASE
+                glbl_nms.pet.eat -= glbl_nms.EAT_DECREASE
+                if glbl_nms.pet.bot > glbl_nms.BOARD_BOT:
+                    glbl_nms.pet.bot += glbl_nms.BOT_INCREASE
+            if glbl_nms.EVENT.key == pygame.K_b and glbl_nms.BG:
+                glbl_nms.BG = False
+                glbl_nms.BOT = True
+                glbl_nms.pet.bot += glbl_nms.BOT_INCREASE
+                glbl_nms.pet.sleep -= glbl_nms.SLEEP_DECREASE
+                glbl_nms.pet.eat -= glbl_nms.EAT_DECREASE
+
+
+# по воле случая изменяет показатели
+def rndm_events():
+    glbl_nms.RNDM_NAMBER = random.randint(glbl_nms.RNDM_CHS[0],
+                                          glbl_nms.RNDM_CHS[1])
+    # incr eat
+    if glbl_nms.RNDM_NAMBER in range(glbl_nms.RNDM_CHANCE_I_EAT[0],
+                                     glbl_nms.RNDM_CHANCE_I_EAT[1]):
+        glbl_nms.pet.eat += random.randint(glbl_nms.RNDM_ORDINARY_DEINC[0],
+                                           glbl_nms.RNDM_ORDINARY_DEINC[1])
+        glbl_nms.RNDM_EAT_INCREASE = True
+    # decr eat
+    elif glbl_nms.RNDM_NAMBER in range(glbl_nms.RNDM_CHANCE_D_EAT[0],
+                                       glbl_nms.RNDM_CHANCE_D_EAT[1]):
+        glbl_nms.pet.eat -= random.randint(glbl_nms.RNDM_ORDINARY_DEINC[0],
+                                           glbl_nms.RNDM_ORDINARY_DEINC[1])
+        glbl_nms.RNDM_EAT_INCREASE = True
+    # incr bot
+    elif glbl_nms.RNDM_NAMBER in range(glbl_nms.RNDM_CHANCE_I_BOT[0],
+                                       glbl_nms.RNDM_CHANCE_I_BOT[1]):
+        glbl_nms.pet.bot += random.randint(glbl_nms.RNDM_ORDINARY_DEINC[0],
+                                           glbl_nms.RNDM_ORDINARY_DEINC[1])
+        glbl_nms.RNDM_BOT_INCREASE = True
+    # decr bot
+    elif glbl_nms.RNDM_NAMBER in range(glbl_nms.RNDM_CHANCE_D_BOT[0],
+                                       glbl_nms.RNDM_CHANCE_D_BOT[1]):
+        glbl_nms.pet.bot -= random.randint(glbl_nms.RNDM_ORDINARY_DEINC[0],
+                                           glbl_nms.RNDM_ORDINARY_DEINC[1])
+        glbl_nms.RNDM_BOT_DECREASE = True
+    # incr sleep
+    elif glbl_nms.RNDM_NAMBER in range(glbl_nms.RNDM_CHANCE_I_SLEEP[0],
+                                       glbl_nms.RNDM_CHANCE_I_SLEEP[1]):
+        glbl_nms.pet.sleep += random.randint(glbl_nms.RNDM_ORDINARY_DEINC[0],
+                                             glbl_nms.RNDM_ORDINARY_DEINC[1])
+        glbl_nms.RNDM_SLEEP_INCREASE = True
+    # decr sleep
+    elif glbl_nms.RNDM_NAMBER in range(glbl_nms.RNDM_CHANCE_D_SLEEP[0],
+                                       glbl_nms.RNDM_CHANCE_D_SLEEP[1]):
+        glbl_nms.pet.sleep -= random.randint(glbl_nms.RNDM_ORDINARY_DEINC[0],
+                                             glbl_nms.RNDM_ORDINARY_DEINC[1])
+        glbl_nms.RNDM_SLEEP_DECREASE = True
+
+
+# рисует таблички с информацией о рандомном событии
+def draw_rndm_events():
+    if glbl_nms.RNDM_BOT_INCREASE:
+        if glbl_nms.RNDM_COUNT == glbl_nms.EMPTY:
+            glbl_nms.RNDM_BOT_INCREASE = False
+            glbl_nms.RNDM_COUNT = glbl_nms.RNDM_COUNT_CONST
+        glbl_nms.RNDM_COUNT -= glbl_nms.ORDINARY_DECREASE
+        glbl_nms.SCREEN.blit(make_anims.I_B, glbl_nms.RNDM_START_POINT)
+    elif glbl_nms.RNDM_BOT_DECREASE:
+        if glbl_nms.RNDM_COUNT == glbl_nms.EMPTY:
+            glbl_nms.RNDM_BOT_DECREASE = False
+            glbl_nms.RNDM_COUNT = glbl_nms.RNDM_COUNT_CONST
+        glbl_nms.RNDM_COUNT -= glbl_nms.ORDINARY_DECREASE
+        glbl_nms.SCREEN.blit(make_anims.D_B, glbl_nms.RNDM_START_POINT)
+    elif glbl_nms.RNDM_EAT_INCREASE:
+        if glbl_nms.RNDM_COUNT == glbl_nms.EMPTY:
+            glbl_nms.RNDM_EAT_INCREASE = False
+            glbl_nms.RNDM_COUNT = glbl_nms.RNDM_COUNT_CONST
+        glbl_nms.RNDM_COUNT -= glbl_nms.ORDINARY_DECREASE
+        glbl_nms.SCREEN.blit(make_anims.I_E, glbl_nms.RNDM_START_POINT)
+    elif glbl_nms.RNDM_EAT_DECREASE:
+        if glbl_nms.RNDM_COUNT == glbl_nms.EMPTY:
+            glbl_nms.RNDM_EAT_DECREASE = False
+            glbl_nms.RNDM_COUNT = glbl_nms.RNDM_COUNT_CONST
+        glbl_nms.RNDM_COUNT -= glbl_nms.ORDINARY_DECREASE
+        glbl_nms.SCREEN.blit(make_anims.D_E, glbl_nms.RNDM_START_POINT)
+    elif glbl_nms.RNDM_SLEEP_INCREASE:
+        if glbl_nms.RNDM_COUNT == glbl_nms.EMPTY:
+            glbl_nms.RNDM_SLEEP_INCREASE = False
+            glbl_nms.RNDM_COUNT = glbl_nms.RNDM_COUNT_CONST
+        glbl_nms.RNDM_COUNT -= glbl_nms.ORDINARY_DECREASE
+        glbl_nms.SCREEN.blit(make_anims.I_S, glbl_nms.RNDM_START_POINT)
+    elif glbl_nms.RNDM_SLEEP_DECREASE:
+        if glbl_nms.RNDM_COUNT == glbl_nms.EMPTY:
+            glbl_nms.RNDM_SLEEP_DECREASE = False
+            glbl_nms.RNDM_COUNT = glbl_nms.RNDM_COUNT_CONST
+        glbl_nms.RNDM_COUNT -= glbl_nms.ORDINARY_DECREASE
+        glbl_nms.SCREEN.blit(make_anims.D_S, glbl_nms.RNDM_START_POINT)
 
 
 def draw_screen():
-    t_eat = HUD.font1.render(f"Satiety: {global_names.pet.eat}", True,
-                             global_names.WHITE)
-    t_bot = HUD.font1.render(f"Bot:       {global_names.pet.bot}", True,
-                             global_names.WHITE)
-    t_sleep = HUD.font1.render(f"Sleep:   {global_names.pet.sleep}", True,
-                               global_names.WHITE)
+    t_eat = HUD.font1.render(f"Satiety: {glbl_nms.pet.eat}", True,
+                             glbl_nms.WHITE)
+    t_bot = HUD.font1.render(f"Bot:       {glbl_nms.pet.bot}", True,
+                             glbl_nms.WHITE)
+    t_sleep = HUD.font1.render(f"Sleep:   {glbl_nms.pet.sleep}", True,
+                               glbl_nms.WHITE)
 
-    if global_names.DEAD:  # отыгровка смерти
-        screen = pygame.display.set_mode(global_names.DEAD_SCREEN)
-        if global_names.ANIM_COUNT >= global_names.DEAD_COUNT:
-            global_names.ANIM_COUNT = global_names.EMPTY
-        screen.blit(make_anims.DEAD1[global_names.ANIM_COUNT],
-                    global_names.START_POINT)
-        global_names.ANIM_COUNT += 1
+    if glbl_nms.DEAD:  # отыгровка смерти
+        glbl_nms.SCREEN = pygame.display.set_mode(glbl_nms.DEAD_SCREEN)
+        if glbl_nms.ANIM_COUNT >= glbl_nms.DEAD_COUNT:
+            glbl_nms.ANIM_COUNT = glbl_nms.EMPTY
+        glbl_nms.SCREEN.blit(make_anims.DEAD1[glbl_nms.ANIM_COUNT],
+                             glbl_nms.START_POINT_2)
+        glbl_nms.ANIM_COUNT += glbl_nms.ANIM_COUNT_INCREASE
 
     # BG
-    elif global_names.BG:
-        screen = pygame.display.set_mode(global_names.BG_SCREEN)
-        if global_names.ANIM_COUNT >= global_names.BG_COUNT:
-            global_names.ANIM_COUNT = global_names.EMPTY
-        screen.blit(make_anims.BG1[global_names.ANIM_COUNT // 2],
-                    global_names.START_POINT)
-        pygame.draw.rect(screen, global_names.BLACK, (10, 10, 70, 34))
-        screen.blit(t_eat, (12, 12))
-        screen.blit(t_bot, (12, 22))
-        screen.blit(t_sleep, (12, 32))
-        global_names.ANIM_COUNT += 1
+    elif glbl_nms.BG:
+        glbl_nms.SCREEN = pygame.display.set_mode(glbl_nms.BG_SCREEN)
+        if glbl_nms.ANIM_COUNT >= glbl_nms.BG_COUNT:
+            glbl_nms.ANIM_COUNT = glbl_nms.EMPTY
+        glbl_nms.SCREEN.blit(make_anims.BG1[
+                                 glbl_nms.ANIM_COUNT // glbl_nms.ANIM_C_BG],
+                             glbl_nms.START_POINT_2)
+        pygame.draw.rect(glbl_nms.SCREEN, glbl_nms.BLACK, glbl_nms.RECT_BG)
+        glbl_nms.SCREEN.blit(t_eat, glbl_nms.START_POINT_1)
+        glbl_nms.SCREEN.blit(t_bot, glbl_nms.START_POINT_T_BOT)
+        glbl_nms.SCREEN.blit(t_sleep, glbl_nms.START_POINT_T_SLEEP)
+        draw_rndm_events()
+        glbl_nms.ANIM_COUNT += glbl_nms.ANIM_COUNT_INCREASE
 
     # Eat
-    elif global_names.EAT:
-        screen = pygame.display.set_mode(global_names.EAT_SCREEN)
-        if global_names.ANIM_COUNT >= global_names.EAT_COUNT:
-            global_names.ANIM_COUNT = global_names.EMPTY
-        screen.blit(make_anims.EAT1[global_names.ANIM_COUNT],
-                    global_names.START_POINT)
-        pygame.draw.rect(screen, global_names.BLACK, (10, 10, 80, 20))
-        screen.blit(HUD.AEat[global_names.ANIM_COUNT * 3 // 40], (12, 12))
-        global_names.ANIM_COUNT += 1
+    elif glbl_nms.EAT:
+        glbl_nms.SCREEN = pygame.display.set_mode(glbl_nms.EAT_SCREEN)
+        if glbl_nms.ANIM_COUNT >= glbl_nms.EAT_COUNT:
+            glbl_nms.ANIM_COUNT = glbl_nms.EMPTY
+        glbl_nms.SCREEN.blit(make_anims.EAT1[glbl_nms.ANIM_COUNT],
+                             glbl_nms.START_POINT_2)
+        pygame.draw.rect(glbl_nms.SCREEN, glbl_nms.BLACK, glbl_nms.RECT_EAT)
+        glbl_nms.SCREEN.blit(
+            HUD.AEat[glbl_nms.ANIM_COUNT // glbl_nms.ANIM_C_EAT],
+            glbl_nms.START_POINT_1)
+        glbl_nms.ANIM_COUNT += glbl_nms.ANIM_COUNT_INCREASE
 
     # Bot
-    elif global_names.BOT:
-        screen = pygame.display.set_mode(global_names.BOT_SCREEN)
-        if global_names.ANIM_COUNT >= global_names.BOT_COUNT:
-            global_names.ANIM_COUNT = global_names.EMPTY
-        screen.blit(make_anims.BOT1[global_names.ANIM_COUNT // 10],
-                    global_names.START_POINT)
-        pygame.draw.rect(screen, global_names.BLACK, (10, 10, 100, 20))
-        screen.blit(HUD.ABot[global_names.ANIM_COUNT // 10], (12, 12))
-        global_names.ANIM_COUNT += 1
+    elif glbl_nms.BOT:
+        glbl_nms.SCREEN = pygame.display.set_mode(glbl_nms.BOT_SCREEN)
+        if glbl_nms.ANIM_COUNT >= glbl_nms.BOT_COUNT:
+            glbl_nms.ANIM_COUNT = glbl_nms.EMPTY
+        glbl_nms.SCREEN.blit(make_anims.BOT1[
+                                 glbl_nms.ANIM_COUNT // glbl_nms.ANIM_C_BOT],
+                             glbl_nms.START_POINT_2)
+        pygame.draw.rect(glbl_nms.SCREEN, glbl_nms.BLACK, glbl_nms.RECT_BOT)
+        glbl_nms.SCREEN.blit(
+            HUD.ABot[glbl_nms.ANIM_COUNT // glbl_nms.ANIM_C_BOT],
+            glbl_nms.START_POINT_1)
+        glbl_nms.ANIM_COUNT += glbl_nms.ANIM_COUNT_INCREASE
 
     # Sleep
-    elif global_names.SLEEP:
-        screen = pygame.display.set_mode(global_names.SLEEP_SCREEN)
-        if global_names.ANIM_COUNT >= global_names.SLEEP_COUNT:
-            global_names.ANIM_COUNT = global_names.EMPTY
-        screen.blit(make_anims.SLEEP1[global_names.ANIM_COUNT // 4],
-                    global_names.START_POINT)
-        pygame.draw.rect(screen, global_names.BLACK, (10, 10, 100, 20))
-        screen.blit(HUD.ASleep[global_names.ANIM_COUNT // 20], (12, 12))
-        global_names.ANIM_COUNT += 1
+    elif glbl_nms.SLEEP:
+        glbl_nms.SCREEN = pygame.display.set_mode(glbl_nms.SLEEP_SCREEN)
+        if glbl_nms.ANIM_COUNT >= glbl_nms.SLEEP_COUNT:
+            glbl_nms.ANIM_COUNT = glbl_nms.EMPTY
+        glbl_nms.SCREEN.blit(
+            make_anims.SLEEP1[
+                glbl_nms.ANIM_COUNT // glbl_nms.ANIM_C_SLEEP_1],
+            glbl_nms.START_POINT_2)
+        pygame.draw.rect(glbl_nms.SCREEN, glbl_nms.BLACK, glbl_nms.RECT_SLEEP)
+        glbl_nms.SCREEN.blit(
+            HUD.ASleep[
+                glbl_nms.ANIM_COUNT // glbl_nms.ANIM_C_SLEEP_2],
+            glbl_nms.START_POINT_1)
+        glbl_nms.ANIM_COUNT += glbl_nms.ANIM_COUNT_INCREASE
 
     pygame.display.update()
