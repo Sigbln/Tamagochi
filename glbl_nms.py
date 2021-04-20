@@ -6,13 +6,9 @@ pygame.init()
 
 # random block
 RNDM_NAMBER = 0
-RNDM_EAT_INCREASE = False
-RNDM_EAT_DECREASE = False
-RNDM_BOT_INCREASE = False
-RNDM_BOT_DECREASE = False
-RNDM_SLEEP_INCREASE = False
-RNDM_SLEEP_DECREASE = False
-RNDM_CHS = [1, 120000]
+EVENT_FLAG = {"eat inc": False, "eat dec": False, "bot inc": False,
+              "bot dec": False, "sleep inc": False, "sleep dec": False}
+RNDM_CHS = [1, 12000]
 RNDM_CHANCE_I_EAT = [0, 20]
 RNDM_CHANCE_D_EAT = [20, 40]
 RNDM_CHANCE_I_BOT = [40, 60]
@@ -23,7 +19,6 @@ RNDM_ORDINARY_DEINC = [1, 10]
 RNDM_COUNT = 60
 RNDM_COUNT_CONST = 60
 RNDM_START_POINT = (150, 75)
-
 
 EVENT = None
 MY_PATH = "save/save.pickle"
@@ -40,7 +35,7 @@ ANIM_C_SLEEP_1 = 4
 ANIM_C_SLEEP_2 = 20
 GAME_TIME = 540  # тики до уменьшения показателей
 GAME_TIME_CONST = 540
-COEF = 90*24
+COEF = 90 * 24
 
 FULL = 100
 EMPTY = 0

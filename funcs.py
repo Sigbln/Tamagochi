@@ -98,80 +98,74 @@ def rndm_events():
                                      glbl_nms.RNDM_CHANCE_I_EAT[1]):
         glbl_nms.pet.eat += random.randint(glbl_nms.RNDM_ORDINARY_DEINC[0],
                                            glbl_nms.RNDM_ORDINARY_DEINC[1])
-        glbl_nms.RNDM_EAT_INCREASE = True
+        glbl_nms.EVENT_FLAG["eat inc"] = True
     # decr eat
     elif glbl_nms.RNDM_NAMBER in range(glbl_nms.RNDM_CHANCE_D_EAT[0],
                                        glbl_nms.RNDM_CHANCE_D_EAT[1]):
         glbl_nms.pet.eat -= random.randint(glbl_nms.RNDM_ORDINARY_DEINC[0],
                                            glbl_nms.RNDM_ORDINARY_DEINC[1])
-        glbl_nms.RNDM_EAT_INCREASE = True
+        glbl_nms.EVENT_FLAG["eat dec"] = True
     # incr bot
     elif glbl_nms.RNDM_NAMBER in range(glbl_nms.RNDM_CHANCE_I_BOT[0],
                                        glbl_nms.RNDM_CHANCE_I_BOT[1]):
         glbl_nms.pet.bot += random.randint(glbl_nms.RNDM_ORDINARY_DEINC[0],
                                            glbl_nms.RNDM_ORDINARY_DEINC[1])
-        glbl_nms.RNDM_BOT_INCREASE = True
+        glbl_nms.EVENT_FLAG["bot inc"] = True
     # decr bot
     elif glbl_nms.RNDM_NAMBER in range(glbl_nms.RNDM_CHANCE_D_BOT[0],
                                        glbl_nms.RNDM_CHANCE_D_BOT[1]):
         glbl_nms.pet.bot -= random.randint(glbl_nms.RNDM_ORDINARY_DEINC[0],
                                            glbl_nms.RNDM_ORDINARY_DEINC[1])
-        glbl_nms.RNDM_BOT_DECREASE = True
+        glbl_nms.EVENT_FLAG["bot dec"] = True
     # incr sleep
     elif glbl_nms.RNDM_NAMBER in range(glbl_nms.RNDM_CHANCE_I_SLEEP[0],
                                        glbl_nms.RNDM_CHANCE_I_SLEEP[1]):
         glbl_nms.pet.sleep += random.randint(glbl_nms.RNDM_ORDINARY_DEINC[0],
                                              glbl_nms.RNDM_ORDINARY_DEINC[1])
-        glbl_nms.RNDM_SLEEP_INCREASE = True
+        glbl_nms.EVENT_FLAG["sleep inc"] = True
     # decr sleep
     elif glbl_nms.RNDM_NAMBER in range(glbl_nms.RNDM_CHANCE_D_SLEEP[0],
                                        glbl_nms.RNDM_CHANCE_D_SLEEP[1]):
         glbl_nms.pet.sleep -= random.randint(glbl_nms.RNDM_ORDINARY_DEINC[0],
                                              glbl_nms.RNDM_ORDINARY_DEINC[1])
-        glbl_nms.RNDM_SLEEP_DECREASE = True
+        glbl_nms.EVENT_FLAG["sleep dec"] = True
+
+
+def event_time(n):
+    if glbl_nms.RNDM_COUNT == glbl_nms.EMPTY:
+        glbl_nms.EVENT_FLAG[n] = False
+        glbl_nms.RNDM_COUNT = glbl_nms.RNDM_COUNT_CONST
 
 
 # рисует таблички с информацией о рандомном событии
 def draw_rndm_events():
-    if glbl_nms.RNDM_BOT_INCREASE:
-        if glbl_nms.RNDM_COUNT == glbl_nms.EMPTY:
-            glbl_nms.RNDM_BOT_INCREASE = False
-            glbl_nms.RNDM_COUNT = glbl_nms.RNDM_COUNT_CONST
+    if glbl_nms.EVENT_FLAG["bot inc"]:
+        event_time("bot inc")
         glbl_nms.RNDM_COUNT -= glbl_nms.ORDINARY_DECREASE
         glbl_nms.SCREEN.blit(make_anims.increase_bot,
                              glbl_nms.RNDM_START_POINT)
-    elif glbl_nms.RNDM_BOT_DECREASE:
-        if glbl_nms.RNDM_COUNT == glbl_nms.EMPTY:
-            glbl_nms.RNDM_BOT_DECREASE = False
-            glbl_nms.RNDM_COUNT = glbl_nms.RNDM_COUNT_CONST
+    elif glbl_nms.EVENT_FLAG["bot dec"]:
+        event_time("bot dec")
         glbl_nms.RNDM_COUNT -= glbl_nms.ORDINARY_DECREASE
         glbl_nms.SCREEN.blit(make_anims.decrease_bot,
                              glbl_nms.RNDM_START_POINT)
-    elif glbl_nms.RNDM_EAT_INCREASE:
-        if glbl_nms.RNDM_COUNT == glbl_nms.EMPTY:
-            glbl_nms.RNDM_EAT_INCREASE = False
-            glbl_nms.RNDM_COUNT = glbl_nms.RNDM_COUNT_CONST
+    elif glbl_nms.EVENT_FLAG["eat inc"]:
+        event_time("eat inc")
         glbl_nms.RNDM_COUNT -= glbl_nms.ORDINARY_DECREASE
         glbl_nms.SCREEN.blit(make_anims.increase_eat,
                              glbl_nms.RNDM_START_POINT)
-    elif glbl_nms.RNDM_EAT_DECREASE:
-        if glbl_nms.RNDM_COUNT == glbl_nms.EMPTY:
-            glbl_nms.RNDM_EAT_DECREASE = False
-            glbl_nms.RNDM_COUNT = glbl_nms.RNDM_COUNT_CONST
+    elif glbl_nms.EVENT_FLAG["eat dec"]:
+        event_time("eat dec")
         glbl_nms.RNDM_COUNT -= glbl_nms.ORDINARY_DECREASE
         glbl_nms.SCREEN.blit(make_anims.decrease_eat,
                              glbl_nms.RNDM_START_POINT)
-    elif glbl_nms.RNDM_SLEEP_INCREASE:
-        if glbl_nms.RNDM_COUNT == glbl_nms.EMPTY:
-            glbl_nms.RNDM_SLEEP_INCREASE = False
-            glbl_nms.RNDM_COUNT = glbl_nms.RNDM_COUNT_CONST
+    elif glbl_nms.EVENT_FLAG["sleep inc"]:
+        event_time("sleep inc")
         glbl_nms.RNDM_COUNT -= glbl_nms.ORDINARY_DECREASE
         glbl_nms.SCREEN.blit(make_anims.increase_sleep,
                              glbl_nms.RNDM_START_POINT)
-    elif glbl_nms.RNDM_SLEEP_DECREASE:
-        if glbl_nms.RNDM_COUNT == glbl_nms.EMPTY:
-            glbl_nms.RNDM_SLEEP_DECREASE = False
-            glbl_nms.RNDM_COUNT = glbl_nms.RNDM_COUNT_CONST
+    elif glbl_nms.EVENT_FLAG["sleep dec"]:
+        event_time("sleep inc")
         glbl_nms.RNDM_COUNT -= glbl_nms.ORDINARY_DECREASE
         glbl_nms.SCREEN.blit(make_anims.decrease_sleep,
                              glbl_nms.RNDM_START_POINT)
