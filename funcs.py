@@ -175,6 +175,7 @@ def anim_time(n):
     if glbl_nms.ANIM_COUNT >= glbl_nms.COUNTS[n]:
         glbl_nms.ANIM_COUNT = glbl_nms.EMPTY
 
+
 def draw_screen():
     t_eat = HUD.font1.render(f"Satiety: {glbl_nms.pet.eat}", True,
                              glbl_nms.WHITE)
