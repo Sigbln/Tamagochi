@@ -8,7 +8,7 @@ pygame.init()
 RNDM_NAMBER = 0
 EVENT_FLAG = {"eat inc": False, "eat dec": False, "bot inc": False,
               "bot dec": False, "sleep inc": False, "sleep dec": False}
-RNDM_CHS = [1, 12000]
+RNDM_CHS = [1, 120000]
 RNDM_CHANCE_I_EAT = [0, 20]
 RNDM_CHANCE_D_EAT = [20, 40]
 RNDM_CHANCE_I_BOT = [40, 60]
@@ -56,11 +56,12 @@ DEAD_SCREEN = (576, 576)
 EAT_SCREEN = (576, 504)
 BOT_SCREEN = (576, 324)
 SLEEP_SCREEN = (576, 430)
-BG_COUNT = 96
-EAT_COUNT = 40
-SLEEP_COUNT = 60
-BOT_COUNT = 30
-DEAD_COUNT = 22
+COUNTS = {"bg": 96, "eat": 40, "sleep": 60, "bot": 30, "dead": 22}
+# BG_COUNT = 96
+# EAT_COUNT = 40
+# SLEEP_COUNT = 60
+# BOT_COUNT = 30
+# DEAD_COUNT = 22
 START_POINT_1 = (12, 12)
 START_POINT_2 = (0, 0)
 START_POINT_T_BOT = (12, 22)

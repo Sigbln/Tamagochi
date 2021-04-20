@@ -171,6 +171,10 @@ def draw_rndm_events():
                              glbl_nms.RNDM_START_POINT)
 
 
+def anim_time(n):
+    if glbl_nms.ANIM_COUNT >= glbl_nms.COUNTS[n]:
+        glbl_nms.ANIM_COUNT = glbl_nms.EMPTY
+
 def draw_screen():
     t_eat = HUD.font1.render(f"Satiety: {glbl_nms.pet.eat}", True,
                              glbl_nms.WHITE)
@@ -181,8 +185,7 @@ def draw_screen():
 
     if glbl_nms.DEAD:  # отыгровка смерти
         glbl_nms.SCREEN = pygame.display.set_mode(glbl_nms.DEAD_SCREEN)
-        if glbl_nms.ANIM_COUNT >= glbl_nms.DEAD_COUNT:
-            glbl_nms.ANIM_COUNT = glbl_nms.EMPTY
+        anim_time("dead")
         glbl_nms.SCREEN.blit(make_anims.DEAD[glbl_nms.ANIM_COUNT],
                              glbl_nms.START_POINT_2)
         glbl_nms.ANIM_COUNT += glbl_nms.ANIM_COUNT_INCREASE
@@ -190,8 +193,7 @@ def draw_screen():
     # BG
     elif glbl_nms.BG:
         glbl_nms.SCREEN = pygame.display.set_mode(glbl_nms.BG_SCREEN)
-        if glbl_nms.ANIM_COUNT >= glbl_nms.BG_COUNT:
-            glbl_nms.ANIM_COUNT = glbl_nms.EMPTY
+        anim_time("bg")
         glbl_nms.SCREEN.blit(make_anims.BG[
                                  glbl_nms.ANIM_COUNT // glbl_nms.ANIM_C_BG],
                              glbl_nms.START_POINT_2)
@@ -205,8 +207,7 @@ def draw_screen():
     # Eat
     elif glbl_nms.EAT:
         glbl_nms.SCREEN = pygame.display.set_mode(glbl_nms.EAT_SCREEN)
-        if glbl_nms.ANIM_COUNT >= glbl_nms.EAT_COUNT:
-            glbl_nms.ANIM_COUNT = glbl_nms.EMPTY
+        anim_time("eat")
         glbl_nms.SCREEN.blit(make_anims.EAT[glbl_nms.ANIM_COUNT],
                              glbl_nms.START_POINT_2)
         pygame.draw.rect(glbl_nms.SCREEN, glbl_nms.BLACK, glbl_nms.RECT_EAT)
@@ -218,8 +219,7 @@ def draw_screen():
     # Bot
     elif glbl_nms.BOT:
         glbl_nms.SCREEN = pygame.display.set_mode(glbl_nms.BOT_SCREEN)
-        if glbl_nms.ANIM_COUNT >= glbl_nms.BOT_COUNT:
-            glbl_nms.ANIM_COUNT = glbl_nms.EMPTY
+        anim_time("bot")
         glbl_nms.SCREEN.blit(make_anims.BOT[
                                  glbl_nms.ANIM_COUNT // glbl_nms.ANIM_C_BOT],
                              glbl_nms.START_POINT_2)
@@ -232,8 +232,7 @@ def draw_screen():
     # Sleep
     elif glbl_nms.SLEEP:
         glbl_nms.SCREEN = pygame.display.set_mode(glbl_nms.SLEEP_SCREEN)
-        if glbl_nms.ANIM_COUNT >= glbl_nms.SLEEP_COUNT:
-            glbl_nms.ANIM_COUNT = glbl_nms.EMPTY
+        anim_time("sleep")
         glbl_nms.SCREEN.blit(
             make_anims.SLEEP[
                 glbl_nms.ANIM_COUNT // glbl_nms.ANIM_C_SLEEP_1],
